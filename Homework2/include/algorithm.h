@@ -44,6 +44,10 @@ matrix bfgs(const std::function<double(const matrix &)> &f,
             const std::function<matrix(const matrix &)> &df,
             matrix H, matrix x);
 
+matrix sgd(const std::function<double(const matrix &)> &f,
+           const std::function<matrix(const matrix &)> &df,
+           matrix x);
+
 // Implementation
 
 double sqr(double x) {
@@ -72,7 +76,7 @@ matrix conjugate_gradient(const std::function<double(matrix)> &f,
     matrix delta_x = -df(x);
     matrix s = delta_x;
     x = x + arg_min(f, x, delta_x) * delta_x;
-    while(delta_x.norm() > eps) {
+    while (delta_x.norm() > eps) {
         matrix new_delta_x = -df(x);
         double beta = ((new_delta_x.T() * new_delta_x) / (delta_x.T() * delta_x))[0][0];
         s = new_delta_x + beta * s;
@@ -279,6 +283,21 @@ matrix bfgs(const std::function<double(const matrix &)> &f,
         H = H + (1 + ((delta_grad.T() * H * delta_grad) / (delta_grad.T() * delta_x))[0][0]) * ((delta_x * delta_x.T()) / (delta_x.T() * delta_grad)) -
             (temp + temp.T()) / (delta_grad.T() * delta_x);
         grad = grad + delta_grad;
+    }
+    return x;
+}
+
+matrix sgd(const std::function<double(const matrix &)> &f,
+           const std::function<matrix(const matrix &)> &df,
+           matrix x) {
+    const double eps = 1e-8;
+    double step = 0.1;
+    double delta = 1;
+    double fx = f(x);
+    while (std::abs(delta) > eps) {
+        x = x - (step * df(x));
+        delta = f(x) - fx;
+        fx += delta;
     }
     return x;
 }

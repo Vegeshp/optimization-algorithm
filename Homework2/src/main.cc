@@ -152,6 +152,25 @@ void question_7() {
     std::cout << std::endl;
 }
 
+void question_10() {
+    std::cout << "10" << std::endl;
+    auto f = [](const matrix &a) -> double {
+        assert(a.line() == 2 && a.column() == 1);
+        double x_1 = a[0][0], x_2 = a[1][0];
+        return sqr(x_1) + sqr(x_2) - x_1 * x_2 - 10 * x_1 - 4 * x_2 + 60;
+    };
+    auto df = [](const matrix &a) -> matrix {
+        assert(a.line() == 2 && a.column() == 1);
+        double x_1 = a[0][0], x_2 = a[1][0];
+        return matrix{{2 * x_1 - x_2 - 10}, {2 * x_2 - x_1 - 4}};
+    };
+    matrix x{{0}, {0}};
+    std::cout << "SGD" << std::endl;
+    matrix result = sgd(f, df, x);
+    std::cout << result << std::endl;
+    std::cout << "Optimized value = " << f(result) << std::endl;
+}
+
 int main() {
     std::cout.setf(std::ios::fixed);
     question_1();
@@ -160,5 +179,6 @@ int main() {
     question_5();
     question_6();
     question_7();
+    question_10();
     return 0;
 }
