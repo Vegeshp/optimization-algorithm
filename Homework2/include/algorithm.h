@@ -36,11 +36,11 @@ double wolfe_powell(const std::function<double(const matrix &)> &f,
                     const std::function<matrix(const matrix &)> &df,
                     matrix x, const matrix &d);
 
-double dfp(const std::function<double(const matrix &)> &f,
+matrix dfp(const std::function<double(const matrix &)> &f,
            const std::function<matrix(const matrix &)> &df,
            matrix H, matrix x);
 
-double bfgs(const std::function<double(const matrix &)> &f,
+matrix bfgs(const std::function<double(const matrix &)> &f,
             const std::function<matrix(const matrix &)> &df,
             matrix H, matrix x);
 
@@ -226,7 +226,7 @@ double wolfe_powell(const std::function<double(const matrix &)> &f,
  * c) grad = (1, x), x \in [-1, 1]
  */
 
-double dfp(const std::function<double(const matrix &)> &f,
+matrix dfp(const std::function<double(const matrix &)> &f,
            const std::function<matrix(const matrix &)> &df,
            matrix H, matrix x) {
     const double eps = 1e-4;
@@ -251,10 +251,10 @@ double dfp(const std::function<double(const matrix &)> &f,
         H = H + ((delta_x * delta_x.T()) / (delta_x.T() * delta_grad)) - (((numerator * numerator.T())) / (delta_grad.T() * H * delta_grad));
         grad = grad + delta_grad;
     }
-    return f(x);
+    return x;
 }
 
-double bfgs(const std::function<double(const matrix &)> &f,
+matrix bfgs(const std::function<double(const matrix &)> &f,
             const std::function<matrix(const matrix &)> &df,
             matrix H, matrix x) {
     const double eps = 1e-8;
@@ -280,7 +280,7 @@ double bfgs(const std::function<double(const matrix &)> &f,
             (temp + temp.T()) / (delta_grad.T() * delta_x);
         grad = grad + delta_grad;
     }
-    return f(x);
+    return x;
 }
 
 #endif  // ALGORITHM_H_

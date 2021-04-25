@@ -4,13 +4,9 @@
 #include "matrix.h"
 
 void question_1() {
+    std::cout << "1" << std::endl;
     double eps = 1e-6;
-    matrix A{{4, 2},
-             {2, 2}},
-        B{{1},
-          {-1}},  // 2 * 1
-        x{{0},
-          {0}};
+    matrix x{{0}, {0}};
     auto f = [](const matrix &a) -> double {
         assert(a.line() == 2 && a.column() == 1);
         double x_1 = a[0][0], x_2 = a[1][0];
@@ -23,11 +19,12 @@ void question_1() {
     };
     matrix result = conjugate_gradient(f, df, x, eps);
     std::cout << result << std::endl;
-    std::cout << (0.5 * result.T() * A * result) + (B.T() * result) << std::endl;
+    std::cout << "Optimized value = " << f(result) << std::endl;
     std::cout << std::endl;
 }
 
 void question_2() {
+    std::cout << "2" << std::endl;
     auto f = [](double x) -> double { return 2 * x * x - x - 1; };
     auto g = [](double x) -> double { return 3 * x * x - 21.6 * x - 1; };
     auto df = [](double x) -> double { return 4 * x - 1; };
@@ -58,6 +55,7 @@ void question_2() {
 }
 
 void question_3() {
+    std::cout << "3" << std::endl;
     matrix x{
         {-1},
         {1}};
@@ -84,6 +82,7 @@ void question_3() {
 }
 
 void question_5() {
+    std::cout << "5" << std::endl;
     auto f = [](const matrix &a) -> double {
         assert(a.line() == 2 && a.column() == 1);
         double x_1 = a[0][0], x_2 = a[1][0];
@@ -97,11 +96,14 @@ void question_5() {
     matrix x{{0.1}, {1}};
     matrix H = matrix::I(2);
     std::cout << "DFP" << std::endl;
-    std::cout << dfp(f, df, H, x) << std::endl;
+    matrix result = dfp(f, df, H, x);
+    std::cout << result << std::endl;
+    std::cout << "Optimized value = " << f(result) << std::endl;
     std::cout << std::endl;
 }
 
 void question_6() {
+    std::cout << "6" << std::endl;
     auto f = [](const matrix &a) -> double {
         assert(a.line() == 2 && a.column() == 1);
         double x_1 = a[0][0], x_2 = a[1][0];
@@ -115,11 +117,14 @@ void question_6() {
     matrix x{{0}, {0}};
     matrix H = matrix::I(2);
     std::cout << "BFGS" << std::endl;
-    std::cout << bfgs(f, df, H, x) << std::endl;
+    matrix result = dfp(f, df, H, x);
+    std::cout << result << std::endl;
+    std::cout << "Optimized value = " << f(result) << std::endl;
     std::cout << std::endl;
 }
 
 void question_7() {
+    std::cout << "7" << std::endl;
     auto f = [](const matrix &a) -> double {
         assert(a.line() == 2 && a.column() == 1);
         double x_1 = a[0][0], x_2 = a[1][0];
@@ -133,22 +138,27 @@ void question_7() {
     matrix x{{0}, {0}};
     matrix H = matrix::I(2);
     std::cout << "DFP" << std::endl;
-    std::cout << dfp(f, df, H, x) << std::endl;
+    matrix dfp_result = dfp(f, df, H, x);
+    std::cout << dfp_result << std::endl;
+    std::cout << "Optimized value = " << f(dfp_result) << std::endl;
     std::cout << "BFGS" << std::endl;
-    std::cout << bfgs(f, df, H, x) << std::endl;
+    matrix bfgs_result = dfp(f, df, H, x);
+    std::cout << bfgs_result << std::endl;
+    std::cout << "Optimized value = " << f(bfgs_result) << std::endl;
     std::cout << "FR conjugate gradient" << std::endl;
     matrix result = conjugate_gradient(f, df, x, 1e-6);
-    std::cout << f(result) << std::endl;
+    std::cout << result << std::endl;
+    std::cout << "Optimized value = " << f(result) << std::endl;
     std::cout << std::endl;
 }
 
 int main() {
     std::cout.setf(std::ios::fixed);
     question_1();
-    // question_2();
-    // question_3();
-    // question_5();
-    // question_6();
+    question_2();
+    question_3();
+    question_5();
+    question_6();
     question_7();
     return 0;
 }
